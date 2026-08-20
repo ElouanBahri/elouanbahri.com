@@ -17,12 +17,12 @@ export const projects: Project[] = [
     href: "#",
   },
   {
-    title: "Portfolio Risk Dashboard",
+    title: "Revoscope",
     tag: "Data / Web App",
     description:
-      "An interactive dashboard visualizing portfolio VaR, drawdowns, and factor exposures in real time.",
-    tech: ["Next.js", "TypeScript", "Python API"],
-    href: "#",
+      "An interactive dashboard for a Revolut investing portfolio — P&L, allocation, dividends, and live prices from a CSV export.",
+    tech: ["Python", "Streamlit", "Plotly"],
+    href: "https://revoscope.streamlit.app/",
   },
   {
     title: "Market Sentiment Model",

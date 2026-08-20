@@ -20,6 +20,12 @@ export default function Projects() {
             <a
               key={project.title}
               href={project.href}
+              target={project.href.startsWith("http") ? "_blank" : undefined}
+              rel={
+                project.href.startsWith("http")
+                  ? "noopener noreferrer"
+                  : undefined
+              }
               className="group flex flex-col rounded-2xl border border-border bg-surface p-6 transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5"
             >
               <span className="text-xs font-medium text-accent">
