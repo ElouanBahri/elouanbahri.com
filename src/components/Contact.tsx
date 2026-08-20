@@ -1,8 +1,7 @@
-// TODO: replace the email address and social links below with your real ones.
-const EMAIL = "contact@elouanbahri.com";
+const EMAIL = "elouan.bahri1@berkeley.edu";
 const socials = [
-  { label: "GitHub", href: "https://github.com/" },
-  { label: "LinkedIn", href: "https://linkedin.com/" },
+  { label: "GitHub", href: "https://github.com/ElouanBahri" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/elouanbahri/" },
 ];
 
 export default function Contact() {
@@ -32,6 +31,8 @@ export default function Contact() {
               <a
                 key={social.label}
                 href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="transition-colors hover:text-foreground"
               >
                 {social.label}
