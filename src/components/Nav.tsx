@@ -1,3 +1,8 @@
+import { Pinyon_Script } from "next/font/google";
+import ThemeToggle from "./ThemeToggle";
+
+const pinyonScript = Pinyon_Script({ weight: "400", subsets: ["latin"] });
+
 const links = [
   { href: "#about", label: "About" },
   { href: "#experience", label: "Experience" },
@@ -13,7 +18,9 @@ export default function Nav() {
           href="#top"
           className="flex items-center gap-2 text-sm font-semibold tracking-tight"
         >
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-sm font-bold text-accent-foreground">
+          <span
+            className={`${pinyonScript.className} text-4xl leading-none text-accent`}
+          >
             EB
           </span>
           <span className="hidden sm:inline">Elouan Bahri</span>
@@ -31,12 +38,15 @@ export default function Nav() {
           ))}
         </nav>
 
-        <a
-          href="#contact"
-          className="rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
-        >
-          Get in touch
-        </a>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <a
+            href="#contact"
+            className="rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+          >
+            Get in touch
+          </a>
+        </div>
       </div>
     </header>
   );
