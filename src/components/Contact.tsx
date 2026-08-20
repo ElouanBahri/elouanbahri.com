@@ -13,8 +13,8 @@ export default function Contact() {
             Let&apos;s talk
           </h2>
           <p className="mx-auto mt-3 max-w-md text-muted-foreground">
-            Open to conversations about quantitative finance, software
-            engineering, and opportunities. Reach out any time.
+            Open to conversations about portfolio management, quantitative
+            investing, and opportunities. Reach out any time.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">

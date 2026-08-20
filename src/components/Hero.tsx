@@ -3,7 +3,7 @@ import Image from "next/image";
 const stats = [
   { label: "Graduating", value: "Feb 2027" },
   { label: "Based between", value: "Paris & Berkeley" },
-  { label: "Focus", value: "Quant Finance × CS" },
+  { label: "Focus", value: "Portfolio Management" },
 ];
 
 export default function Hero() {
@@ -30,8 +30,9 @@ export default function Hero() {
             </h1>
 
             <p className="mt-4 max-w-2xl text-xl text-muted-foreground text-balance">
-              Engineering student and quantitative finance enthusiast,
-              building at the intersection of markets and software.
+              Engineering student with a deep passion for portfolio
+              management and quantitative investing, working toward becoming
+              a successful portfolio manager.
             </p>
           </div>
 
@@ -48,9 +49,10 @@ export default function Hero() {
         <p className="mt-6 max-w-2xl leading-relaxed text-muted-foreground">
           I&apos;m an ENSAE Paris engineering student and Master in Financial
           Engineering (MFE) candidate at UC Berkeley, graduating in February
-          2027. Passionate about quantitative finance and computer science, I
-          bring strong determination, energy, and a fast-learning mindset to
-          every project I take on.
+          2027. Portfolio management and quantitative investing are what
+          drive me, and my long-term goal is to build a career as a
+          successful portfolio manager — bringing strong determination,
+          energy, and a fast-learning mindset to every step along the way.
         </p>
 
         <div className="mt-10 flex flex-wrap gap-3">

@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Elouan Bahri",
   description:
-    "Elouan Bahri — ENSAE Paris engineer & UC Berkeley MFE candidate working at the intersection of quantitative finance and software engineering.",
+    "Elouan Bahri — ENSAE Paris engineer & UC Berkeley MFE candidate, building toward a career in portfolio management and quantitative investing.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

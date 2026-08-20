@@ -39,16 +39,6 @@ export const experience: TimelineEntry[] = [
     ],
   },
   {
-    org: "J.P. Morgan",
-    role: "Quantitative Risk Trading Strategy — Spinoff Index Inclusion/Deletion Arbitrage",
-    location: "Berkeley, CA, USA",
-    period: "June 2026 – Aug 2026",
-    bullets: [
-      "Designed a beta-hedged, market-neutral long strategy on post-spinoff parent stocks, achieving a 0.69 Sharpe Ratio.",
-      "Built leakage-free decision tree and logistic regression models to estimate index-inclusion probabilities and return terciles, increasing Sharpe from 0.69 to 1.29 via probability-weighted position sizing (nested LOO-CV).",
-    ],
-  },
-  {
     org: "Barclays Investment Bank",
     role: "Rates Strat Intern",
     location: "Paris, France",
@@ -58,17 +48,6 @@ export const experience: TimelineEntry[] = [
       "Engineered an LSTM model to predict RFQ hit probability (0.72 AUC), generating a live probability matrix by DV01 and client industry to optimize skew and capture alpha.",
       "Built a modular Python backtesting framework computing Sharpe Ratio, PnL/trade, carry, and holding time.",
       "Developed real-time risk engines (AG Grid/Charts) giving EM, SSA, and inflation desks instant DV01 exposure and RFQ analytics.",
-    ],
-  },
-  {
-    org: "b-cube.ai",
-    role: "Cryptocurrency Price Prediction & Trading Strategies (research)",
-    location: "Paris, France",
-    period: "Dec 2024 – Jun 2025",
-    bullets: [
-      "Built a modular framework comparing classical time series models (ARIMA, GARCH) with ML models (LSTM/GRU, XGBoost, LLMs); ML models achieved 56% accuracy on 15-minute return forecasting for 2024.",
-      "Designed an object-oriented pipeline for multi-asset data ingestion (Binance API), feature engineering, training, and backtesting, with automated real-time predictions via cron jobs.",
-      "Deployed personal capital live, yielding a 25% net return over 3 months in 2025 after fees and slippage.",
     ],
   },
   {
