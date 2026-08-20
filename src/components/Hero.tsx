@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const stats = [
   { label: "Graduating", value: "Feb 2027" },
   { label: "Based between", value: "Paris & Berkeley" },
@@ -16,19 +18,32 @@ export default function Hero() {
       />
 
       <div className="relative mx-auto max-w-5xl">
-        <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-1.5 text-xs font-medium text-muted-foreground">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-          ENSAE Paris × UC Berkeley MFE
-        </p>
+        <div className="flex flex-col-reverse items-start gap-10 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex-1">
+            <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-1.5 text-xs font-medium text-muted-foreground">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              ENSAE Paris × UC Berkeley MFE
+            </p>
 
-        <h1 className="text-5xl font-semibold tracking-tight text-balance sm:text-6xl">
-          Elouan Bahri
-        </h1>
+            <h1 className="text-5xl font-semibold tracking-tight text-balance sm:text-6xl">
+              Elouan Bahri
+            </h1>
 
-        <p className="mt-4 max-w-2xl text-xl text-muted-foreground text-balance">
-          Engineering student and quantitative finance enthusiast, building at
-          the intersection of markets and software.
-        </p>
+            <p className="mt-4 max-w-2xl text-xl text-muted-foreground text-balance">
+              Engineering student and quantitative finance enthusiast,
+              building at the intersection of markets and software.
+            </p>
+          </div>
+
+          <Image
+            src="/images/elouan-bahri.jpg"
+            alt="Elouan Bahri"
+            width={192}
+            height={192}
+            priority
+            className="h-32 w-32 shrink-0 rounded-2xl border border-border object-cover sm:h-48 sm:w-48"
+          />
+        </div>
 
         <p className="mt-6 max-w-2xl leading-relaxed text-muted-foreground">
           I&apos;m an ENSAE Paris engineering student and Master in Financial
@@ -50,6 +65,13 @@ export default function Hero() {
             className="rounded-full border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-surface"
           >
             Get in touch
+          </a>
+          <a
+            href="/resume/Elouan-Bahri-Resume.pdf"
+            download
+            className="rounded-full border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-surface"
+          >
+            Download resume
           </a>
         </div>
 
