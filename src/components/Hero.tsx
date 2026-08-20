@@ -2,8 +2,8 @@ import Image from "next/image";
 
 const stats = [
   { label: "Graduating", value: "Feb 2027" },
-  { label: "Based between", value: "Paris & Berkeley" },
-  { label: "Focus", value: "Portfolio Management" },
+  { label: "Based in", value: "the USA" },
+  { label: "Focus", value: "Portfolio Management & Quant Finance" },
 ];
 
 export default function Hero() {
@@ -26,7 +26,7 @@ export default function Hero() {
             </p>
 
             <h1 className="text-5xl font-semibold tracking-tight text-balance sm:text-6xl">
-              Elouan Bahri
+              Welcome to my website
             </h1>
 
             <p className="mt-4 max-w-2xl text-xl text-muted-foreground text-balance">
@@ -47,12 +47,15 @@ export default function Hero() {
         </div>
 
         <p className="mt-6 max-w-2xl leading-relaxed text-muted-foreground">
-          I&apos;m an ENSAE Paris engineering student and Master in Financial
-          Engineering (MFE) candidate at UC Berkeley, graduating in February
-          2027. Portfolio management and quantitative investing are what
-          drive me, and my long-term goal is to build a career as a
-          successful portfolio manager — bringing strong determination,
-          energy, and a fast-learning mindset to every step along the way.
+          My name is Elouan Bahri. I&apos;m an ENSAE Paris engineering student
+          and Master in Financial Engineering (MFE) candidate at UC Berkeley,
+          graduating in February 2027. Portfolio management and quantitative
+          investing are what drive me, and my long-term goal is to build a
+          career as a successful portfolio manager — bringing strong
+          determination, energy, and a fast-learning mindset to every step
+          along the way. I also built this website using Claude — a small
+          demonstration of my ability to create new things with AI, even
+          without a software engineering background.
         </p>
 
         <div className="mt-10 flex flex-wrap gap-3">
