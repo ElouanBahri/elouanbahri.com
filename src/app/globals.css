@@ -9,6 +9,9 @@
   --accent: #2f6feb;
   --accent-soft: #eaf1fe;
   --accent-foreground: #ffffff;
+  --blob-1: #2f6feb;
+  --blob-2: #8b5cf6;
+  --blob-3: #14b8a6;
 }
 
 @theme inline {
@@ -34,6 +37,9 @@
     --accent: #5b8def;
     --accent-soft: #16233d;
     --accent-foreground: #0a0b0d;
+    --blob-1: #5b8def;
+    --blob-2: #a78bfa;
+    --blob-3: #2dd4bf;
   }
 }
 
@@ -46,6 +52,9 @@
   --accent: #5b8def;
   --accent-soft: #16233d;
   --accent-foreground: #0a0b0d;
+  --blob-1: #5b8def;
+  --blob-2: #a78bfa;
+  --blob-3: #2dd4bf;
 }
 
 html {
@@ -68,4 +77,27 @@ body {
 
 .section-anchor {
   scroll-margin-top: 6rem;
+}
+
+@keyframes blob-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(24px, -30px) scale(1.05);
+  }
+  66% {
+    transform: translate(-22px, 26px) scale(0.96);
+  }
+}
+
+.animate-blob-drift {
+  animation: blob-drift ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-blob-drift {
+    animation: none;
+  }
 }

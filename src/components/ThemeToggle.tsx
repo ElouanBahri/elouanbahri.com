@@ -14,7 +14,11 @@ export default function ThemeToggle() {
   const [theme, setTheme] = useState<Theme | null>(null);
 
   useEffect(() => {
+    // Reading localStorage/matchMedia must happen after mount (SSR has no
+    // access to them) — setting state here to avoid a light/dark hydration
+    // mismatch is the correct, standard pattern for this, not an effect misuse.
     const stored = localStorage.getItem("theme");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTheme(stored === "light" || stored === "dark" ? stored : getSystemTheme());
   }, []);
 
@@ -32,7 +36,7 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-surface"
+      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground transition-all hover:bg-surface active:scale-90"
     >
       {isDark ? (
         <svg

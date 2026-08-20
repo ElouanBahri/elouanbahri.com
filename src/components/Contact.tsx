@@ -1,3 +1,5 @@
+import Reveal from "./Reveal";
+
 const EMAIL = "elouan.bahri1@berkeley.edu";
 const socials = [
   { label: "GitHub", href: "https://github.com/ElouanBahri" },
@@ -8,7 +10,7 @@ export default function Contact() {
   return (
     <section id="contact" className="section-anchor px-6 py-24">
       <div className="mx-auto max-w-5xl">
-        <div className="rounded-3xl border border-border bg-surface px-8 py-16 text-center sm:px-16">
+        <Reveal className="rounded-3xl border border-border bg-surface px-8 py-16 text-center sm:px-16">
           <h2 className="text-3xl font-semibold tracking-tight">
             Let&apos;s talk
           </h2>
@@ -20,7 +22,7 @@ export default function Contact() {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a
               href={`mailto:${EMAIL}`}
-              className="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+              className="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-all hover:opacity-90 active:scale-95"
             >
               {EMAIL}
             </a>
@@ -39,7 +41,7 @@ export default function Contact() {
               </a>
             ))}
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

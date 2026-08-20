@@ -42,7 +42,7 @@ export default function Nav() {
           <ThemeToggle />
           <a
             href="#contact"
-            className="rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+            className="rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-all hover:opacity-90 active:scale-95"
           >
             Get in touch
           </a>

@@ -1,4 +1,5 @@
 import { education, experience, type TimelineEntry } from "@/data/timeline";
+import Reveal from "./Reveal";
 
 function TimelineList({ entries }: { entries: TimelineEntry[] }) {
   return (
@@ -39,27 +40,29 @@ export default function Timeline() {
   return (
     <section id="experience" className="section-anchor bg-surface px-6 py-24">
       <div className="mx-auto max-w-5xl">
-        <h2 className="text-3xl font-semibold tracking-tight">
-          Education & Experience
-        </h2>
-        <p className="mt-2 text-muted-foreground">
-          Where I&apos;ve studied and worked.
-        </p>
+        <Reveal>
+          <h2 className="text-3xl font-semibold tracking-tight">
+            Education & Experience
+          </h2>
+          <p className="mt-2 text-muted-foreground">
+            Where I&apos;ve studied and worked.
+          </p>
+        </Reveal>
 
         <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-2">
-          <div>
+          <Reveal delay={0.1}>
             <h3 className="mb-6 text-xs font-medium tracking-wide text-muted-foreground uppercase">
               Education
             </h3>
             <TimelineList entries={education} />
-          </div>
+          </Reveal>
 
-          <div>
+          <Reveal delay={0.2}>
             <h3 className="mb-6 text-xs font-medium tracking-wide text-muted-foreground uppercase">
               Experience
             </h3>
             <TimelineList entries={experience} />
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>
