@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { projects } from "@/data/projects";
+import MarketChartBackground from "./MarketChartBackground";
 import ProjectCard from "./ProjectCard";
 import Reveal from "./Reveal";
 
@@ -12,8 +13,13 @@ const gridVariants = {
 
 export default function Projects() {
   return (
-    <section id="projects" className="section-anchor px-6 py-24">
-      <div className="mx-auto max-w-5xl">
+    <section
+      id="projects"
+      className="section-anchor relative overflow-hidden px-6 py-24"
+    >
+      <MarketChartBackground />
+
+      <div className="relative mx-auto max-w-5xl">
         <Reveal className="mb-12 flex items-end justify-between">
           <div>
             <h2 className="text-3xl font-semibold tracking-tight">

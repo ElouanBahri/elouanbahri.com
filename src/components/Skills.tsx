@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { skillGroups } from "@/data/skills";
 import Reveal from "./Reveal";
+import SparklineGrid from "./SparklineGrid";
 
 const gridVariants = {
   hidden: {},
@@ -16,8 +17,13 @@ const cardVariants = {
 
 export default function Skills() {
   return (
-    <section id="skills" className="section-anchor bg-surface px-6 py-24">
-      <div className="mx-auto max-w-5xl">
+    <section
+      id="skills"
+      className="section-anchor relative overflow-hidden bg-surface px-6 py-24"
+    >
+      <SparklineGrid />
+
+      <div className="relative mx-auto max-w-5xl">
         <Reveal>
           <h2 className="text-3xl font-semibold tracking-tight">Skills</h2>
           <p className="mt-2 text-muted-foreground">

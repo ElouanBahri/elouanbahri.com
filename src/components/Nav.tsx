@@ -1,5 +1,6 @@
 import { Pinyon_Script } from "next/font/google";
 import ThemeToggle from "./ThemeToggle";
+import TickerTape from "./TickerTape";
 
 const pinyonScript = Pinyon_Script({ weight: "400", subsets: ["latin"] });
 
@@ -48,6 +49,8 @@ export default function Nav() {
           </a>
         </div>
       </div>
+
+      <TickerTape />
     </header>
   );
 }
