@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const COLORS = ["#2f6feb", "#8b5cf6", "#14b8a6", "#f59e0b", "#ec4899"];
+const COLORS = ["#ef4444", "#3b82f6", "#a855f7", "#b91c1c", "#7c3aed"];
 const PATH_COUNT = 5;
 const POINT_COUNT = 220;
 const DURATION_MS = 5000;
@@ -25,11 +25,16 @@ function generateBrownianPath(): number[] {
   return path;
 }
 
-function normalize(path: number[]): number[] {
-  const min = Math.min(...path);
-  const max = Math.max(...path);
+/** Normalize all paths against one shared scale, so index 0 (which is 0 for
+ * every path) lands on the exact same y position for all of them. */
+function normalizeShared(paths: number[][]): number[][] {
+  const allValues = paths.flat();
+  const min = Math.min(...allValues);
+  const max = Math.max(...allValues);
   const range = max - min || 1;
-  return path.map((v) => 0.12 + ((v - min) / range) * 0.76);
+  return paths.map((path) =>
+    path.map((v) => 0.12 + ((v - min) / range) * 0.76),
+  );
 }
 
 export default function MarketChartBackground() {
@@ -102,8 +107,8 @@ export default function MarketChartBackground() {
     }
 
     function start() {
-      paths = Array.from({ length: PATH_COUNT }, () =>
-        normalize(generateBrownianPath()),
+      paths = normalizeShared(
+        Array.from({ length: PATH_COUNT }, () => generateBrownianPath()),
       );
       startTime = performance.now();
       running = true;

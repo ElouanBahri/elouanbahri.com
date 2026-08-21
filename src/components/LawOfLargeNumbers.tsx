@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const COLORS = ["#2f6feb", "#14b8a6", "#f59e0b"];
+const COLORS = ["#ef4444", "#b91c1c", "#fca5a5"];
 const SERIES_COUNT = 3;
 const POINT_COUNT = 260;
 const DURATION_MS = 5000;
