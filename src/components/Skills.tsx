@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import { skillGroups } from "@/data/skills";
+import LawOfLargeNumbers from "./LawOfLargeNumbers";
 import Reveal from "./Reveal";
-import SparklineGrid from "./SparklineGrid";
 
 const gridVariants = {
   hidden: {},
@@ -21,7 +21,7 @@ export default function Skills() {
       id="skills"
       className="section-anchor relative overflow-hidden bg-surface px-6 py-24"
     >
-      <SparklineGrid />
+      <LawOfLargeNumbers />
 
       <div className="relative mx-auto max-w-5xl">
         <Reveal>

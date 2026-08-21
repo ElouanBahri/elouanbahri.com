@@ -2,37 +2,27 @@
 
 import { useEffect, useRef } from "react";
 
-const COLORS = ["#2f6feb", "#8b5cf6", "#14b8a6", "#f59e0b", "#ec4899"];
-const PATH_COUNT = 5;
-const POINT_COUNT = 220;
+const COLORS = ["#2f6feb", "#14b8a6", "#f59e0b"];
+const SERIES_COUNT = 3;
+const POINT_COUNT = 260;
 const DURATION_MS = 5000;
-const VOLATILITY = 0.045;
+const TRUE_MEAN = 3.5; // fair six-sided die: E[X] = (1+2+...+6)/6
+const MIN_VAL = 1;
+const MAX_VAL = 6;
 
-function randn(): number {
-  let u = 0;
-  let v = 0;
-  while (u === 0) u = Math.random();
-  while (v === 0) v = Math.random();
-  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
-}
-
-/** A discretized Wiener process: cumulative Gaussian increments. */
-function generateBrownianPath(): number[] {
-  const path: number[] = [0];
-  for (let i = 1; i < POINT_COUNT; i++) {
-    path.push(path[i - 1] + randn() * VOLATILITY);
+/** Running average of n fair die rolls, for n = 1..POINT_COUNT. */
+function simulateRunningMean(): number[] {
+  const means: number[] = [];
+  let sum = 0;
+  for (let n = 1; n <= POINT_COUNT; n++) {
+    const roll = 1 + Math.floor(Math.random() * 6);
+    sum += roll;
+    means.push(sum / n);
   }
-  return path;
+  return means;
 }
 
-function normalize(path: number[]): number[] {
-  const min = Math.min(...path);
-  const max = Math.max(...path);
-  const range = max - min || 1;
-  return path.map((v) => 0.12 + ((v - min) / range) * 0.76);
-}
-
-export default function MarketChartBackground() {
+export default function LawOfLargeNumbers() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -45,6 +35,11 @@ export default function MarketChartBackground() {
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+
+    const mutedColor =
+      getComputedStyle(document.documentElement)
+        .getPropertyValue("--muted-foreground")
+        .trim() || "#5c6169";
 
     let width = 0;
     let height = 0;
@@ -62,6 +57,11 @@ export default function MarketChartBackground() {
     resize();
     window.addEventListener("resize", resize);
 
+    function valueToY(v: number) {
+      const t = (v - MIN_VAL) / (MAX_VAL - MIN_VAL);
+      return height * (1 - (0.12 + t * 0.76));
+    }
+
     function drawSmoothPath(points: { x: number; y: number }[]) {
       if (points.length < 2) return;
       ctx!.beginPath();
@@ -76,24 +76,37 @@ export default function MarketChartBackground() {
       ctx!.stroke();
     }
 
-    let paths: number[][] = [];
+    let series: number[][] = [];
     let raf = 0;
     let startTime = 0;
     let running = false;
 
     function render(progress: number) {
       ctx!.clearRect(0, 0, width, height);
+
+      ctx!.save();
+      ctx!.setLineDash([5, 5]);
+      ctx!.strokeStyle = mutedColor;
+      ctx!.globalAlpha = 0.35;
+      ctx!.lineWidth = 1;
+      const meanY = valueToY(TRUE_MEAN);
+      ctx!.beginPath();
+      ctx!.moveTo(0, meanY);
+      ctx!.lineTo(width, meanY);
+      ctx!.stroke();
+      ctx!.restore();
+
       const step = width / (POINT_COUNT - 1);
       const visibleCount = Math.max(2, Math.floor(POINT_COUNT * progress));
 
-      paths.forEach((path, idx) => {
-        const points = path.slice(0, visibleCount).map((v, i) => ({
+      series.forEach((means, idx) => {
+        const points = means.slice(0, visibleCount).map((v, i) => ({
           x: i * step,
-          y: height * (1 - v),
+          y: valueToY(v),
         }));
         ctx!.strokeStyle = COLORS[idx % COLORS.length];
         ctx!.lineWidth = 1.6;
-        ctx!.globalAlpha = 0.28;
+        ctx!.globalAlpha = 0.32;
         ctx!.lineJoin = "round";
         ctx!.lineCap = "round";
         drawSmoothPath(points);
@@ -102,8 +115,8 @@ export default function MarketChartBackground() {
     }
 
     function start() {
-      paths = Array.from({ length: PATH_COUNT }, () =>
-        normalize(generateBrownianPath()),
+      series = Array.from({ length: SERIES_COUNT }, () =>
+        simulateRunningMean(),
       );
       startTime = performance.now();
       running = true;
@@ -151,12 +164,17 @@ export default function MarketChartBackground() {
         aria-hidden
         className="absolute inset-0 h-full w-full"
       />
-      <span
+      <div
         aria-hidden
-        className="text-muted-foreground/50 absolute top-4 right-6 font-mono text-[10px] tracking-wide uppercase"
+        className="text-muted-foreground/60 absolute top-6 left-6 max-w-xs font-mono text-[10px] leading-relaxed"
       >
-        Brownian Motion
-      </span>
+        <p className="font-semibold tracking-wide uppercase">
+          Law of Large Numbers
+        </p>
+        <p className="mt-1">
+          M<sub>n</sub> = (1/n) Σ X<sub>i</sub> → μ  as  n → ∞
+        </p>
+      </div>
     </div>
   );
 }
