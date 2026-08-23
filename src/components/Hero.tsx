@@ -92,8 +92,7 @@ export default function Hero() {
           career as a successful portfolio manager — bringing strong
           determination, energy, and a fast-learning mindset to every step
           along the way. I also built this website using Claude — a small
-          demonstration of my ability to create new things with AI, even
-          without a software engineering background.
+          demonstration of my ability to create new things with AI.
         </motion.p>
 
         <motion.div variants={item} className="mt-10 flex flex-wrap gap-3">
