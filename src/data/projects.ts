@@ -8,6 +8,14 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    title: "ChronoStrike",
+    tag: "Derivatives / Web App",
+    description:
+      "An interactive equity options learning tool — click through the Greeks (delta, gamma, theta, vega, rho) and watch live Black-Scholes charts respond instantly as you drag the price, volatility, and time-to-expiry sliders.",
+    tech: ["Next.js", "TypeScript", "Framer Motion"],
+    href: "https://chronostrike.elouanbahri.com",
+  },
+  {
     title: "Revoscope",
     tag: "Data / Web App",
     description:
