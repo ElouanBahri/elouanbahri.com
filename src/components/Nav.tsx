@@ -13,10 +13,7 @@ export default function Nav() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-border/80 bg-background/75 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
-        <a
-          href="#top"
-          className="flex items-center gap-2 text-sm font-semibold tracking-tight"
-        >
+        <a href="#top" className="flex items-center">
           <Image
             src="/logo-mark.png"
             alt="Elouan Bahri"
@@ -25,7 +22,6 @@ export default function Nav() {
             className="h-9 w-9 rounded-lg"
             priority
           />
-          <span className="hidden sm:inline">Elouan Bahri</span>
         </a>
 
         <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
