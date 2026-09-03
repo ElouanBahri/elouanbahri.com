@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Trader Math Drill</title>
+<style>
+  :root{
+    --bg: #0a0e0c;
+    --panel: #10201a;
+    --line: #1e3a2f;
+    --text: #d7f5e3;
+    --dim: #6f9385;
+    --accent: #3ddc84;
+    --accent-dim: #1f6b47;
+    --bad: #ff5c5c;
+    --amber: #e8b64c;
+    --mono: "JetBrains Mono","SF Mono",Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse at 20% -10%, #123625 0%, transparent 45%),
+      radial-gradient(ellipse at 100% 110%, #0e2a1e 0%, transparent 50%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--mono);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+  .rig{
+    width:100%;
+    max-width:760px;
+  }
+  .ticker{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    border-bottom:1px solid var(--line);
+    padding-bottom:12px;
+    margin-bottom:18px;
+  }
+  .ticker h1{
+    font-size:15px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    margin:0;
+    color:var(--dim);
+    font-weight:500;
+  }
+  .ticker .sym{ color:var(--accent); }
+  .ticker .clock{
+    font-size:28px;
+    font-variant-numeric: tabular-nums;
+    color:var(--text);
+    font-weight:600;
+  }
+  .clock.low{ color:var(--amber); }
+  .clock.crit{ color:var(--bad); animation:pulse 1s infinite; }
+  @keyframes pulse{ 50%{opacity:.45;} }
+
+  .panel{
+    background: var(--panel);
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:36px 32px;
+    position:relative;
+  }
+  .panel::before{
+    content:"";
+    position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, var(--accent), transparent 60%);
+  }
+
+  /* ---- Setup screen ---- */
+  .setup h2{
+    font-size:20px; margin:0 0 6px; color:var(--text); font-weight:600;
+  }
+  .setup p{ color:var(--dim); font-size:13.5px; line-height:1.6; margin:0 0 22px;}
+  .modes{ display:grid; gap:10px; margin-bottom:24px; }
+  .mode-btn{
+    display:flex; justify-content:space-between; align-items:center;
+    background:#0d1b15; border:1px solid var(--line); color:var(--text);
+    padding:14px 16px; cursor:pointer; font-family:var(--mono); font-size:13.5px;
+    border-radius:2px; text-align:left; transition:border-color .15s, background .15s;
+  }
+  .mode-btn:hover{ border-color:var(--accent-dim); background:#0f2119; }
+  .mode-btn.active{ border-color:var(--accent); background:#0f2b1e; }
+  .mode-btn .spec{ color:var(--dim); font-size:12px; }
+  .mode-btn .tag{
+    font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+    padding:2px 8px; border:1px solid var(--accent-dim); border-radius:20px; color:var(--accent);
+  }
+  .start-btn{
+    width:100%; padding:15px; background:var(--accent); border:none; color:#06180f;
+    font-family:var(--mono); font-weight:700; font-size:14px; letter-spacing:.05em;
+    text-transform:uppercase; cursor:pointer; border-radius:2px; margin-top:4px;
+  }
+  .start-btn:hover{ background:#4be894; }
+  .start-btn:disabled{ background:var(--line); color:var(--dim); cursor:not-allowed; }
+
+  .time-row{
+    border:1px solid var(--line); border-radius:2px; padding:14px 16px; margin-bottom:16px;
+    background:#0d1b15;
+  }
+  .time-row label{
+    display:block; font-size:11px; color:var(--dim); text-transform:uppercase;
+    letter-spacing:.08em; margin-bottom:10px;
+  }
+  .time-input-wrap{ display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+  .time-input-wrap input{
+    width:100px; background:#06120d; border:1px solid var(--line); color:var(--text);
+    font-family:var(--mono); font-size:16px; padding:8px 10px; border-radius:2px; outline:none;
+  }
+  .time-input-wrap input:focus{ border-color:var(--accent); }
+  .time-input-wrap span{ color:var(--dim); font-size:12.5px; }
+  .time-presets{ display:flex; flex-wrap:wrap; gap:6px; }
+  .time-presets button{
+    background:transparent; border:1px solid var(--line); color:var(--dim);
+    font-family:var(--mono); font-size:11.5px; padding:5px 10px; border-radius:20px;
+    cursor:pointer; transition:border-color .15s, color .15s;
+  }
+  .time-presets button:hover{ border-color:var(--accent-dim); color:var(--text); }
+  .time-presets button.active{ border-color:var(--accent); color:var(--accent); }
+
+  /* ---- Drill screen ---- */
+  .drill{ display:none; }
+  .drill.on{ display:block; }
+  .hud{
+    display:flex; justify-content:space-between; font-size:12px; color:var(--dim);
+    margin-bottom:18px; letter-spacing:.04em; text-transform:uppercase;
+  }
+  .hud b{ color:var(--text); font-weight:600; }
+  .q-wrap{
+    min-height:120px; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; text-align:center; padding:20px 0 28px;
+  }
+  .q-kind{ font-size:11px; color:var(--accent); letter-spacing:.12em; text-transform:uppercase; margin-bottom:14px;}
+  .q-text{ font-size:34px; font-weight:600; letter-spacing:.01em; }
+  .q-seq{ font-size:26px; font-weight:600; }
+  .q-seq .blank{ color:var(--accent); }
+  input.ans{
+    width:100%; background:#06120d; border:1px solid var(--line); color:var(--text);
+    font-family:var(--mono); font-size:22px; text-align:center; padding:14px;
+    border-radius:2px; outline:none;
+  }
+  input.ans:focus{ border-color:var(--accent); }
+  input.ans.wrong{ border-color:var(--bad); }
+  input.ans.right{ border-color:var(--accent); }
+  .barwrap{ height:4px; background:var(--line); border-radius:2px; margin-top:22px; overflow:hidden; }
+  .bar{ height:100%; background:var(--accent); width:100%; transition:width .1s linear; }
+  .bar.low{ background:var(--amber); }
+  .bar.crit{ background:var(--bad); }
+  .hint{ margin-top:14px; font-size:11.5px; color:var(--dim); text-align:center; }
+
+  /* ---- Results ---- */
+  .results{ display:none; }
+  .results.on{ display:block; }
+  .results h2{ font-size:20px; margin:0 0 20px; }
+  .stat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:24px; }
+  .stat{ background:#0d1b15; border:1px solid var(--line); padding:16px; border-radius:2px; }
+  .stat .n{ font-size:26px; font-weight:700; color:var(--accent); }
+  .stat.bad .n{ color:var(--bad); }
+  .stat .l{ font-size:10.5px; color:var(--dim); text-transform:uppercase; letter-spacing:.08em; margin-top:4px;}
+  .log{ max-height:220px; overflow-y:auto; border:1px solid var(--line); border-radius:2px; margin-bottom:20px; }
+  .log-row{
+    display:flex; justify-content:space-between; padding:9px 14px; font-size:12.5px;
+    border-bottom:1px solid var(--line);
+  }
+  .log-row:last-child{ border-bottom:none; }
+  .log-row.ok{ color:var(--text); }
+  .log-row.no{ color:var(--bad); }
+  .log-row .ok-mark{ color:var(--accent); }
+  .retry-btn{
+    width:100%; padding:14px; background:transparent; border:1px solid var(--accent);
+    color:var(--accent); font-family:var(--mono); font-weight:600; font-size:13px;
+    letter-spacing:.05em; text-transform:uppercase; cursor:pointer; border-radius:2px;
+  }
+  .retry-btn:hover{ background:rgba(61,220,132,0.08); }
+
+  @media (max-width:520px){
+    .panel{padding:26px 18px;}
+    .q-text{font-size:26px;}
+    .q-seq{font-size:20px;}
+    .stat-grid{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="rig">
+  <div class="ticker">
+    <h1>Trader Math Drill <span class="sym">// AKUNA-FORMAT</span></h1>
+    <div class="clock" id="clock">--:--</div>
+  </div>
+
+  <div class="panel">
+
+    <!-- SETUP -->
+    <div class="setup" id="setup">
+      <h2>Pick a drill</h2>
+      <p>Timed the way the real assessment runs it: rapid mental arithmetic under a hard clock, and pattern completion for the sequences bank. No calculator, no scratch pad — type and move.</p>
+      <div class="modes" id="modes">
+        <div class="mode-btn active" data-mode="math60">
+          <div>Mental Math <div class="spec">Arithmetic, %, fractions — one at a time</div></div>
+          <div class="tag" id="spec-math60">60s</div>
+        </div>
+        <div class="mode-btn" data-mode="seq">
+          <div>Sequences <div class="spec">Find the next term — numeric &amp; letter patterns</div></div>
+          <div class="tag" id="spec-seq">90s</div>
+        </div>
+        <div class="mode-btn" data-mode="mixed">
+          <div>Mixed Set <div class="spec">Math + sequences interleaved, full-length pass</div></div>
+          <div class="tag" id="spec-mixed">3min</div>
+        </div>
+      </div>
+      <div class="time-row">
+        <label for="customTime">Session length</label>
+        <div class="time-input-wrap">
+          <input type="number" id="customTime" min="10" max="1800" step="5" value="60" />
+          <span>seconds</span>
+        </div>
+        <div class="time-presets" id="timePresets">
+          <button type="button" data-secs="30">30s</button>
+          <button type="button" data-secs="60" class="active">60s</button>
+          <button type="button" data-secs="120">2min</button>
+          <button type="button" data-secs="180">3min</button>
+          <button type="button" data-secs="300">5min</button>
+          <button type="button" data-secs="480">8min</button>
+        </div>
+      </div>
+      <button class="start-btn" id="startBtn">Start drill</button>
+    </div>
+
+    <!-- DRILL -->
+    <div class="drill" id="drill">
+      <div class="hud">
+        <span>Q <b id="qNum">1</b>/<span id="qTotal">--</span></span>
+        <span>Score <b id="scoreLive">0</b></span>
+        <span>Streak <b id="streakLive">0</b></span>
+      </div>
+      <div class="q-wrap">
+        <div class="q-kind" id="qKind">MENTAL MATH</div>
+        <div class="q-text" id="qText">17 × 8</div>
+      </div>
+      <input class="ans" id="ansInput" type="text" inputmode="decimal" autocomplete="off" placeholder="type answer, press enter" />
+      <div class="barwrap"><div class="bar" id="qBar"></div></div>
+      <div class="hint">Enter to submit &middot; can't go back &middot; go at your own pace within the clock &middot; bar below tracks overall time left, not per-question</div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results" id="results">
+      <h2>Session closed</h2>
+      <div class="stat-grid">
+        <div class="stat"><div class="n" id="rCorrect">0</div><div class="l">Correct</div></div>
+        <div class="stat bad"><div class="n" id="rWrong">0</div><div class="l">Wrong / Skipped</div></div>
+        <div class="stat"><div class="n" id="rAvg">0.0s</div><div class="l">Avg time / answer</div></div>
+      </div>
+      <div class="log" id="log"></div>
+      <button class="retry-btn" id="retryBtn">Run another set</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ================= Question generators ================= */
+function randInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function round2(x){ return Math.round(x*100)/100; }
+
+function genMath(){
+  const kind = pick(['mul','div','add','sub','pct','frac','mulBig','triple']);
+  let text, answer, tol=0;
+  if(kind==='mul'){
+    const a=randInt(2,19), b=randInt(2,19);
+    text = `${a} × ${b}`; answer = a*b;
+  } else if(kind==='mulBig'){
+    const a=randInt(11,29), b=randInt(11,39);
+    text = `${a} × ${b}`; answer = a*b;
+  } else if(kind==='div'){
+    const b=randInt(2,17), q=randInt(2,20);
+    const a=b*q;
+    text = `${a} ÷ ${b}`; answer = q;
+  } else if(kind==='add'){
+    const a=randInt(23,389), b=randInt(23,389);
+    text = `${a} + ${b}`; answer = a+b;
+  } else if(kind==='sub'){
+    const a=randInt(100,900), b=randInt(20,a-5);
+    text = `${a} − ${b}`; answer = a-b;
+  } else if(kind==='pct'){
+    const p=pick([5,10,15,20,25,30,40,50,75]);
+    const base=randInt(4,60)*4;
+    text = `${p}% of ${base}`; answer = round2(base*p/100);
+  } else if(kind==='triple'){
+    // three-component chained calculations, e.g. 2000 × 0.06 × 10, or (a+b)×c, or a×b÷c
+    const shape = pick(['mulDecMul','addThenMul','mulThenAdd','mulDivChain','threeAdd']);
+    if(shape==='mulDecMul'){
+      const base = pick([100,200,500,1000,2000,4000,5000]);
+      const dec = pick([0.02,0.04,0.05,0.06,0.08,0.1,0.12,0.15,0.2,0.25]);
+      const mult = pick([2,3,4,5,10,20]);
+      text = `${base} × ${dec} × ${mult}`;
+      answer = round2(base*dec*mult);
+    } else if(shape==='addThenMul'){
+      const a=randInt(10,90), b=randInt(10,90), c=randInt(2,9);
+      text = `(${a} + ${b}) × ${c}`;
+      answer = (a+b)*c;
+    } else if(shape==='mulThenAdd'){
+      const a=randInt(500,3000), b=randInt(2,40), c=randInt(2,9);
+      text = `${a} + ${b} × ${c}`;
+      answer = a + b*c;
+    } else if(shape==='mulDivChain'){
+      const divisor = randInt(2,12);
+      const preDiv = randInt(3,25)*divisor;
+      const mult = randInt(2,9);
+      text = `${preDiv} × ${mult} ÷ ${divisor}`;
+      answer = preDiv*mult/divisor;
+    } else {
+      const a=randInt(50,400), b=randInt(50,400), c=randInt(50,400);
+      text = `${a} + ${b} + ${c}`;
+      answer = a+b+c;
+    }
+  } else { // frac -> decimal
+    const pairs = [[1,2,0.5],[1,4,0.25],[3,4,0.75],[1,8,0.125],[3,8,0.375],
+                    [5,8,0.625],[7,8,0.875],[1,5,0.2],[2,5,0.4],[3,5,0.6],
+                    [4,5,0.8],[1,3,0.333],[2,3,0.667]];
+    const p = pick(pairs);
+    text = `${p[0]}/${p[1]} as a decimal`; answer = p[2]; tol=0.01;
+  }
+  return {kind:'math', text, answer, tol};
+}
+
+function genSeq(){
+  const kind = pick(['arith','geom','fib','squares','doublediff','lettergap','altsign']);
+  let seq, answer, note;
+  if(kind==='arith'){
+    const start=randInt(1,20), step=randInt(2,9)*pick([1,-1]);
+    seq=[]; for(let i=0;i<5;i++) seq.push(start+step*i);
+    answer = start+step*5;
+  } else if(kind==='geom'){
+    const start=randInt(1,4), ratio=pick([2,3]);
+    seq=[]; let v=start; for(let i=0;i<5;i++){ seq.push(v); v*=ratio; }
+    answer=v;
+  } else if(kind==='fib'){
+    let a=randInt(1,3), b=randInt(a+1,a+4);
+    seq=[a,b]; for(let i=0;i<3;i++){ const c=seq[seq.length-1]+seq[seq.length-2]; seq.push(c); }
+    answer = seq[seq.length-1]+seq[seq.length-2];
+  } else if(kind==='squares'){
+    const start=randInt(1,4);
+    seq=[]; for(let i=0;i<5;i++) seq.push((start+i)*(start+i));
+    answer=(start+5)*(start+5);
+  } else if(kind==='doublediff'){
+    const start=randInt(40,90), d0=randInt(2,6);
+    seq=[start]; let d=d0;
+    for(let i=0;i<4;i++){ seq.push(seq[seq.length-1]-d); d*=2; }
+    answer = seq[seq.length-1]-d;
+  } else if(kind==='lettergap'){
+    const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let idx=randInt(0,4), gap=1;
+    seq=[]; for(let i=0;i<5;i++){ seq.push(letters[idx]); idx+=gap; gap++; }
+    answer = letters[idx];
+  } else { // altsign
+    const start=randInt(5,15), step=randInt(2,6);
+    seq=[]; let v=start;
+    for(let i=0;i<5;i++){ seq.push(v); v = i%2===0 ? v+step : v-Math.floor(step/2)-1; }
+    answer=v;
+  }
+  return {kind:'seq', text: seq.join(', ') + ', ?', answer};
+}
+
+/* ================= Session config ================= */
+const MODES = {
+  math60:  { label:'Mental Math', seconds:60, gen:()=>genMath() },
+  seq:     { label:'Sequences',   seconds:90, gen:()=>genSeq()  },
+  mixed:   { label:'Mixed Set',   seconds:180, gen:()=>Math.random()<0.6?genMath():genSeq() }
+};
+
+let state = null;
+let sessionTimer = null;
+let qTimer = null;
+
+/* ---- DOM refs ---- */
+const setupEl = document.getElementById('setup');
+const drillEl = document.getElementById('drill');
+const resultsEl = document.getElementById('results');
+const clockEl = document.getElementById('clock');
+const modesWrap = document.getElementById('modes');
+const startBtn = document.getElementById('startBtn');
+const ansInput = document.getElementById('ansInput');
+const qText = document.getElementById('qText');
+const qKind = document.getElementById('qKind');
+const qNum = document.getElementById('qNum');
+const qTotal = document.getElementById('qTotal');
+const scoreLive = document.getElementById('scoreLive');
+const streakLive = document.getElementById('streakLive');
+const qBar = document.getElementById('qBar');
+const retryBtn = document.getElementById('retryBtn');
+
+let selectedMode = 'math60';
+modesWrap.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.mode-btn');
+  if(!btn) return;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedMode = btn.dataset.mode;
+});
+
+const customTimeInput = document.getElementById('customTime');
+const timePresets = document.getElementById('timePresets');
+
+function fmtSecs(s){
+  if(s % 60 === 0 && s >= 60) return (s/60)+'min';
+  if(s > 60) return Math.floor(s/60)+'m'+(s%60)+'s';
+  return s+'s';
+}
+
+function syncTag(){
+  const secs = parseInt(customTimeInput.value) || 60;
+  const label = fmtSecs(secs);
+  document.getElementById('spec-math60').textContent = selectedMode==='math60' ? label : document.getElementById('spec-math60').textContent;
+}
+
+timePresets.addEventListener('click', (e)=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  customTimeInput.value = btn.dataset.secs;
+  document.querySelectorAll('.time-presets button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+});
+
+customTimeInput.addEventListener('input', ()=>{
+  document.querySelectorAll('.time-presets button').forEach(b=>{
+    b.classList.toggle('active', parseInt(b.dataset.secs)===parseInt(customTimeInput.value));
+  });
+});
+
+startBtn.addEventListener('click', startSession);
+retryBtn.addEventListener('click', ()=>{
+  resultsEl.classList.remove('on');
+  setupEl.style.display = 'block';
+});
+
+function startSession(){
+  const cfg = MODES[selectedMode];
+  const customSecs = parseInt(customTimeInput.value);
+  const seconds = (customSecs && customSecs > 0) ? customSecs : cfg.seconds;
+  state = {
+    cfg: { ...cfg, seconds },
+    remaining: seconds,
+    log: [],
+    score: 0,
+    streak: 0,
+    current: null,
+    qStart: null
+  };
+  setupEl.style.display='none';
+  resultsEl.classList.remove('on');
+  drillEl.classList.add('on');
+  qTotal.textContent = '∞';
+  scoreLive.textContent = '0';
+  streakLive.textContent = '0';
+
+  sessionTimer = setInterval(tickSession, 100);
+  nextQuestion();
+  ansInput.focus();
+}
+
+function tickSession(){
+  state.remaining -= 0.1;
+  const r = Math.max(0, state.remaining);
+  const m = Math.floor(r/60), s = Math.floor(r%60);
+  clockEl.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  clockEl.classList.toggle('low', r<=15 && r>5);
+  clockEl.classList.toggle('crit', r<=5);
+  const pct = Math.max(0, 100*r/state.cfg.seconds);
+  qBar.style.width = pct+'%';
+  qBar.classList.toggle('low', pct<30 && pct>=10);
+  qBar.classList.toggle('crit', pct<10);
+  if(r<=0){
+    endSession();
+  }
+}
+
+function nextQuestion(){
+  const q = state.cfg.gen();
+  state.current = q;
+  state.qStart = performance.now();
+  qKind.textContent = q.kind==='math' ? 'MENTAL MATH' : 'SEQUENCE — NEXT TERM';
+  qText.textContent = q.text;
+  ansInput.value = '';
+  ansInput.classList.remove('right','wrong');
+  qNum.textContent = state.log.length + 1;
+  qBar.style.width='100%';
+}
+
+ansInput.addEventListener('keydown', (e)=>{
+  if(e.key==='Enter'){
+    submitAnswer(ansInput.value.trim());
+  }
+});
+
+function checkAnswer(q, raw){
+  if(raw===null || raw==='') return false;
+  const val = parseFloat(raw.replace(',', '.'));
+  if(isNaN(val)) return false;
+  const tol = q.tol || 0.001;
+  return Math.abs(val - q.answer) <= Math.max(tol, Math.abs(q.answer)*0.005);
+}
+
+function submitAnswer(raw, timedOut){
+  if(!state || !state.current) return;
+  clearInterval(qTimer);
+  const q = state.current;
+  const timeTaken = (performance.now()-state.qStart)/1000;
+  const correct = timedOut ? false : checkAnswer(q, raw);
+
+  ansInput.classList.add(correct?'right':'wrong');
+
+  state.log.push({
+    text:q.text, given: timedOut ? '(skipped)' : raw, answer:q.answer,
+    correct, time:timeTaken
+  });
+  if(correct){ state.score++; state.streak++; }
+  else { state.streak = 0; }
+  scoreLive.textContent = state.score;
+  streakLive.textContent = state.streak;
+
+  setTimeout(()=>{
+    if(state.remaining>0) nextQuestion();
+  }, correct?120:280);
+}
+
+function endSession(){
+  clearInterval(sessionTimer);
+  clearInterval(qTimer);
+  drillEl.classList.remove('on');
+  resultsEl.classList.add('on');
+
+  const total = state.log.length;
+  const correct = state.log.filter(l=>l.correct).length;
+  const wrong = total-correct;
+  const avgTime = total ? (state.log.reduce((s,l)=>s+l.time,0)/total) : 0;
+
+  document.getElementById('rCorrect').textContent = correct;
+  document.getElementById('rWrong').textContent = wrong;
+  document.getElementById('rAvg').textContent = avgTime.toFixed(1)+'s';
+
+  const logEl = document.getElementById('log');
+  logEl.innerHTML = state.log.slice().reverse().map(l=>{
+    return `<div class="log-row ${l.correct?'ok':'no'}">
+      <span>${l.text}</span>
+      <span>${l.correct? '<span class="ok-mark">✓</span>' : `✗ you: ${l.given} / ans: ${l.answer}`} &middot; ${l.time.toFixed(1)}s</span>
+    </div>`;
+  }).join('');
+
+  clockEl.textContent = '0:00';
+  clockEl.classList.remove('low','crit');
+}
+</script>
+</body>
+</html>

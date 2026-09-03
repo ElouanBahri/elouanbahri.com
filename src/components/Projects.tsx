@@ -42,6 +42,21 @@ export default function Projects() {
             <ProjectCard key={project.title} project={project} />
           ))}
         </motion.div>
+
+        <Reveal delay={0.15} className="mt-10 text-center">
+          <p className="text-sm text-muted-foreground">
+            Bonus: if you want to train mental math and sequences,{" "}
+            <a
+              href="/trader-math-drill.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-accent underline underline-offset-4 hover:text-foreground"
+            >
+              click here
+            </a>
+            .
+          </p>
+        </Reveal>
       </div>
     </section>
   );
