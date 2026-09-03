@@ -1,8 +1,6 @@
-import { Pinyon_Script } from "next/font/google";
+import Image from "next/image";
 import ThemeToggle from "./ThemeToggle";
 import TickerTape from "./TickerTape";
-
-const pinyonScript = Pinyon_Script({ weight: "400", subsets: ["latin"] });
 
 const links = [
   { href: "#about", label: "About" },
@@ -19,11 +17,14 @@ export default function Nav() {
           href="#top"
           className="flex items-center gap-2 text-sm font-semibold tracking-tight"
         >
-          <span
-            className={`${pinyonScript.className} text-4xl leading-none text-accent`}
-          >
-            EB
-          </span>
+          <Image
+            src="/logo-mark.png"
+            alt="Elouan Bahri"
+            width={40}
+            height={40}
+            className="h-9 w-9 rounded-lg"
+            priority
+          />
           <span className="hidden sm:inline">Elouan Bahri</span>
         </a>
 
