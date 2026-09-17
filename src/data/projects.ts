@@ -19,9 +19,9 @@ export const projects: Project[] = [
     title: "Revoscope",
     tag: "Data / Web App",
     description:
-      "An interactive dashboard for a Revolut investing portfolio — P&L, allocation, dividends, and live prices from a CSV export.",
-    tech: ["Python", "Streamlit", "Plotly"],
-    href: "https://revoscope.streamlit.app/",
+      "A full-stack investing dashboard — P&L, allocation, dividends, and live prices merged across Revolut CSV imports, Binance, and Interactive Brokers accounts.",
+    tech: ["FastAPI", "React", "TypeScript", "Tailwind"],
+    href: "https://revoscope.elouanbahri.com/",
   },
   {
     title: "Spinoff Index Arbitrage",
