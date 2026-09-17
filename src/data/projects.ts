@@ -39,4 +39,20 @@ export const projects: Project[] = [
     tech: ["Python", "PyTorch", "XGBoost"],
     href: "https://github.com/ElouanBahri/Predicting_crypto_prices",
   },
+  {
+    title: "ENS-CFM Data Challenge",
+    tag: "Machine Learning",
+    description:
+      "A stock-identification classifier for the ENS/CFM challenge — inferring which of 158 stocks a piece of anonymized tick-by-tick order-book data belongs to, ranking 16th on the private leaderboard (10% above benchmark).",
+    tech: ["Python", "scikit-learn", "Pandas"],
+    href: "https://github.com/ElouanBahri/ENS_CFM_data_challenge",
+  },
+  {
+    title: "C++ PDE Option Pricer",
+    tag: "Quantitative Finance",
+    description:
+      "A C++ implementation of numerical PDE solvers for pricing European and digital call/put options under the Black-Scholes-Merton framework, outputting price grids for visualization.",
+    tech: ["C++"],
+    href: "https://github.com/ElouanBahri/C-_Pricing_EDP",
+  },
 ];
